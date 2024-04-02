@@ -10,9 +10,9 @@ pub struct Timer {
 impl Timer {
     pub fn new(duration: f32) -> Self {
         Timer {
-            time_left: duration,
             started: false,
             duration: duration,
+            time_left: duration,
         }
     }
 
@@ -132,6 +132,7 @@ async fn main() {
     };
     let mut enemies = Vec::<Enemy>::new();
     let mut enemy_timer = Timer::new(0.5);
+    let mut score: i32 = 0;
     enemy_timer.start();
     println!("Enemies: {:?}", enemies);
     loop {
@@ -166,6 +167,7 @@ async fn main() {
                 enemy.timer.start();
             }
             if enemy.timer.is_done() {
+                score += 1;
                 return false;
             }
             if enemy.position.distance_squared(player.position)
@@ -181,6 +183,7 @@ async fn main() {
             return true;
         });
 
+        draw_text(&score.to_string(), 30.0, 30.0, 30.0, WHITE);
         next_frame().await
     }
 }
